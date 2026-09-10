@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gestion des cookies — AJM Courtage</title>
+<meta name="description" content="Gérez vos préférences de cookies sur le site AJM Courtage." />
+<link rel="canonical" href="https://ajmcourtages.fr/cookies.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="AJM Courtage" />
+<meta property="og:title" content="Gestion des cookies — AJM Courtage" />
+<meta property="og:description" content="Gérez vos préférences de cookies sur le site AJM Courtage." />
+<meta property="og:url" content="https://ajmcourtages.fr/cookies.html" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Gestion des cookies — AJM Courtage" />
+<meta name="twitter:description" content="Gérez vos préférences de cookies sur le site AJM Courtage." />
+<link rel="icon" href="assets/logo.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<!--
+  Tracking marketing (GA4 / Meta Pixel / TikTok Pixel) : volontairement PAS
+  chargé ici. Ces scripts déposent des cookies non essentiels et ne doivent
+  s'exécuter qu'après consentement (RGPD). Voir consent.js, qui affiche le
+  bandeau cookies et charge les 3 pixels uniquement si l'utilisateur accepte.
+  Les identifiants réels (GA4/Meta/TikTok) sont à renseigner en haut de ce
+  fichier, à la place des placeholders indiqués.
+-->
+</head>
+<body data-page="cookies" data-product="">
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.jpg" alt="Logo AJM Courtage" />
+      <span>
+        <span class="brand-name">AJM COURTAGE</span>
+        <span class="brand-tag">Mieux assuré ensemble</span>
+      </span>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html">Accueil</a>
+<a href="#produits">Nos assurances</a>
+<a href="#pourquoi">Pourquoi AJM Courtage ?</a>
+<a href="#faq">FAQ</a>
+<a href="#contact">Contact</a>
+
+      <a class="btn btn-primary nav-cta-mobile" href="#devis">Obtenir mon devis</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#devis">Obtenir mon devis</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+<script>
+  (function () {
+    var btn = document.querySelector(".nav-toggle");
+    var nav = document.querySelector(".main-nav");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+      var open = nav.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.textContent = open ? "✕" : "☰";
+    });
+  })();
+</script>
+
+<main>
+  <section>
+    <div class="wrap" style="max-width:760px">
+      <div class="section-head">
+        <h1 style="font-size:2rem">Gestion des cookies</h1>
+      </div>
+      
+      <div class="legal-body">
+        <h2>Qu'est-ce qu'un cookie ?</h2>
+        <p>Un cookie est un petit fichier déposé sur votre appareil lors de la visite d'un site, permettant de
+        reconnaître votre navigateur et de mémoriser certaines informations.</p>
+
+        <h2>Cookies utilisés sur ce site</h2>
+        <p><strong>Cookies essentiels</strong> — nécessaires au fonctionnement du site (mémorisation de votre choix
+        de consentement). Ils ne peuvent pas être désactivés.</p>
+        <p><strong>Cookies de mesure d'audience (Google Analytics 4)</strong> — nous aident à comprendre comment le
+        site est utilisé, de façon agrégée.</p>
+        <p><strong>Cookies publicitaires (Meta Pixel, TikTok Pixel)</strong> — permettent de mesurer l'efficacité de
+        nos campagnes publicitaires et de vous proposer des contenus pertinents sur ces plateformes.</p>
+        <p>Aucun de ces cookies n'est déposé avant que vous n'ayez donné votre accord.</p>
+
+        <h2>Gérer vos préférences</h2>
+        <div id="cookie-prefs" class="cookie-prefs">
+          <label class="cookie-toggle">
+            <input type="checkbox" checked disabled>
+            <span>Cookies essentiels — toujours actifs</span>
+          </label>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="pref-analytics">
+            <span>Mesure d'audience (Google Analytics 4)</span>
+          </label>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="pref-marketing">
+            <span>Publicité personnalisée (Meta, TikTok)</span>
+          </label>
+          <button type="button" id="pref-save" class="btn btn-primary" style="margin-top:16px">Enregistrer mes préférences</button>
+          <p id="pref-saved" style="display:none;color:var(--teal);font-weight:600;margin-top:10px">Préférences enregistrées.</p>
+        </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            var a = document.getElementById("pref-analytics");
+            var m = document.getElementById("pref-marketing");
+            var saved = document.getElementById("pref-saved");
+            var existing = window.ajmGetConsent && window.ajmGetConsent();
+            if (existing) { a.checked = !!existing.analytics; m.checked = !!existing.marketing; }
+            document.getElementById("pref-save").addEventListener("click", function () {
+              if (window.ajmSetConsent) window.ajmSetConsent({ analytics: a.checked, marketing: m.checked });
+              saved.style.display = "block";
+            });
+          });
+        </script>
+      </div>
+    
+    </div>
+  </section>
+</main>
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="assets/logo.jpg" alt="Logo AJM Courtage" />
+        <p>Cabinet de courtage en assurances. Nous comparons les offres du marché pour vous accompagner vers la couverture la plus adaptée à votre situation.</p>
+      </div>
+      <div>
+        <h4>Assurances</h4>
+        <ul><li><a href="assurance-sante.html">Santé</a></li>
+<li><a href="prevoyance.html">Prévoyance</a></li>
+<li><a href="assurance-auto.html">Auto</a></li>
+<li><a href="assurance-moto.html">Moto</a></li>
+<li><a href="assurance-chien-chat.html">Chien & Chat</a></li>
+<li><a href="assurance-habitation.html">Habitation</a></li>
+<li><a href="assurance-emprunteur.html">Emprunteur</a></li></ul>
+      </div>
+      <div>
+        <h4>Cabinet</h4>
+        <ul>
+          <li><a href="index.html#pourquoi">Pourquoi AJM Courtage ?</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="confidentialite.html">Confidentialité</a></li>
+          <li><a href="cookies.html">Gestion des cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AJM Courtage — S.A.S au capital de 100 €. Contenus à titre indicatif, hors conditions contractuelles.</span>
+      <span>9 Rue de la Butte, 77167 Bagneaux-sur-Loing</span>
+    </div>
+  </div>
+</footer>
+<script src="consent.js" defer></script>
+<script src="tracking.js" defer></script>
+<script src="form.js" defer></script>
+</body>
+</html>
