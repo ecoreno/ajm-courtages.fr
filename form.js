@@ -22,7 +22,8 @@
     "assurance-sante": [
       { id: "situation", label: "Situation familiale", type: "select", options: ["Célibataire", "En couple", "Famille avec enfants", "Senior"] },
       { id: "personnes", label: "Nombre de personnes à assurer", type: "number", placeholder: "ex. 2" },
-      { id: "besoin", label: "Besoin principal", type: "select", options: ["Consultations", "Hospitalisation", "Optique", "Dentaire", "Plusieurs besoins"] },
+      { id: "besoin", label: "Besoin(s) — plusieurs choix possibles", type: "checkbox", options: ["Consultations", "Hospitalisation", "Optique", "Dentaire"] },
+      { id: "priorite", label: "Degré de priorité de cette demande", type: "stars", max: 4 },
       { id: "statut_pro", label: "Situation professionnelle", type: "select", options: ["Salarié", "Indépendant", "Sans emploi", "Retraité", "Étudiant"] },
       { id: "cp", label: "Code postal", type: "text", placeholder: "ex. 77167" }
     ],
@@ -147,6 +148,26 @@
     }
 
     function fieldHtml(f, value) {
+      if (f.type === "checkbox") {
+        var selected = (value || "").split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+        var out = '<div class="lf-field" data-field="' + f.id + '"><label>' + f.label + '</label><div class="lf-checkbox-group">';
+        f.options.forEach(function (o) {
+          out += '<label class="lf-checkbox-option"><input type="checkbox" name="' + f.id + '" value="' + o + '"' + (selected.indexOf(o) !== -1 ? " checked" : "") + '><span>' + o + '</span></label>';
+        });
+        out += '</div><span class="lf-error">Sélectionnez au moins une option.</span></div>';
+        return out;
+      }
+      if (f.type === "stars") {
+        var current = parseInt(value, 10) || 0;
+        var max = f.max || 4;
+        var out2 = '<div class="lf-field" data-field="' + f.id + '"><label>' + f.label + '</label><div class="lf-stars" data-stars-for="' + f.id + '">';
+        for (var i = 1; i <= max; i++) {
+          out2 += '<button type="button" class="lf-star' + (i <= current ? " filled" : "") + '" data-star="' + i + '" aria-label="' + i + ' sur ' + max + '">★</button>';
+        }
+        out2 += '</div><input type="hidden" data-id="' + f.id + '" value="' + current + '">';
+        out2 += '<span class="lf-error">Merci d\u2019indiquer un niveau de priorité.</span></div>';
+        return out2;
+      }
       var out = '<div class="lf-field" data-field="' + f.id + '"><label for="lf-' + f.id + '">' + f.label + '</label>';
       if (f.type === "select") {
         out += '<select id="lf-' + f.id + '" data-id="' + f.id + '"><option value="">Sélectionner…</option>';
@@ -189,6 +210,19 @@
         });
       }
       var backBtn = root.querySelector('[data-role="back"]');
+      root.querySelectorAll(".lf-stars").forEach(function (group) {
+        var fieldId = group.getAttribute("data-stars-for");
+        var hidden = root.querySelector('.lf-field[data-field="' + fieldId + '"] input[type="hidden"]');
+        group.querySelectorAll(".lf-star").forEach(function (star) {
+          star.addEventListener("click", function () {
+            var val = parseInt(star.getAttribute("data-star"), 10);
+            if (hidden) hidden.value = val;
+            group.querySelectorAll(".lf-star").forEach(function (s) {
+              s.classList.toggle("filled", parseInt(s.getAttribute("data-star"), 10) <= val);
+            });
+          });
+        });
+      });
       if (backBtn) backBtn.addEventListener("click", function () {
         state.step = Math.max(1, state.step - 1);
         render();
@@ -214,9 +248,15 @@
         var fields = FIELDS[state.product] || [];
         var valid = true;
         fields.forEach(function (f) {
-          var el = root.querySelector('[data-id="' + f.id + '"]');
           var wrap = root.querySelector('[data-field="' + f.id + '"]');
-          var val = el.value.trim();
+          var val;
+          if (f.type === "checkbox") {
+            var checked = Array.prototype.slice.call(root.querySelectorAll('input[name="' + f.id + '"]:checked'));
+            val = checked.map(function (c) { return c.value; }).join(", ");
+          } else {
+            var el = root.querySelector('[data-id="' + f.id + '"]');
+            val = el.value.trim();
+          }
           state.answers[f.id] = val;
           if (!val) { wrap.classList.add("invalid"); valid = false; }
           else wrap.classList.remove("invalid");
